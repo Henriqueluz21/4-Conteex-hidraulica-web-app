@@ -1,0 +1,328 @@
+/* ============================================
+   PÁGINA DE PRODUTO — Hidráulica São Gabriel
+   Usa as variáveis do style.css (mesmo design)
+   ============================================ */
+
+/* ── Breadcrumb ────────────────────────────── */
+.breadcrumb {
+    padding: 16px 0;
+    font-size: 13px;
+    color: var(--color-muted);
+    border-bottom: 1px solid var(--color-border);
+}
+.breadcrumb a { color: var(--color-muted); transition: color var(--transition); }
+.breadcrumb a:hover { color: var(--color-accent); }
+.breadcrumb span { margin: 0 8px; color: var(--color-border); }
+.breadcrumb strong { color: var(--color-text); font-weight: 600; }
+
+/* ── Layout principal ──────────────────────── */
+.product-section { padding-block: 48px; }
+.product-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+}
+
+/* ── Galeria ───────────────────────────────── */
+.product-gallery__main {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+}
+.product-gallery__main img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.product-gallery__main .badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+}
+
+.product-gallery__thumbs {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+}
+.thumb {
+    width: 80px;
+    height: 80px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 2px solid var(--color-border);
+    background: var(--color-surface);
+    cursor: pointer;
+    padding: 0;
+    transition: border-color var(--transition);
+}
+.thumb img { width: 100%; height: 100%; object-fit: cover; }
+.thumb.active,
+.thumb:hover { border-color: var(--color-accent); }
+
+/* ── Informações ───────────────────────────── */
+.product-info__category {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 8px;
+}
+.product-info__title {
+    font-family: var(--font-display);
+    font-size: clamp(24px, 3vw, 34px);
+    line-height: 1.2;
+    margin-bottom: 12px;
+}
+.product-info__rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--color-muted);
+    margin-bottom: 20px;
+}
+.product-info__rating .rating__stars { color: #F59F00; }
+.product-info__rating-count { font-size: 13px; }
+
+/* Preço */
+.product-info__price {
+    padding: 20px;
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    margin-bottom: 20px;
+}
+.price-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+.price-original {
+    font-size: 14px;
+    color: var(--color-muted);
+    text-decoration: line-through;
+}
+.price-discount {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-danger);
+    background: #FFF0F0;
+    padding: 2px 8px;
+    border-radius: var(--radius-pill);
+}
+.price-current {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 10px;
+}
+.price-pix {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+.price-pix strong { font-size: 20px; color: var(--color-success); }
+.price-pix__hint { font-size: 13px; color: var(--color-muted); }
+.price-installments { font-size: 13px; color: var(--color-muted); }
+
+.product-info__desc {
+    font-size: 14px;
+    color: var(--color-muted);
+    line-height: 1.7;
+    margin-bottom: 24px;
+}
+
+/* Compra */
+.product-info__buy {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+.qty-stepper {
+    display: flex;
+    align-items: center;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+}
+.qty-stepper button {
+    width: 44px;
+    height: 48px;
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--color-text);
+    transition: background var(--transition);
+}
+.qty-stepper button:hover { background: var(--color-surface); }
+.qty-stepper input {
+    width: 48px;
+    height: 48px;
+    border: none;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-text);
+    background: transparent;
+}
+
+.product-buy-btn { flex: 1; min-width: 180px; }
+
+.btn--whatsapp {
+    background: #25D366;
+    color: #fff;
+    flex: 1;
+    min-width: 200px;
+}
+.btn--whatsapp:hover {
+    background: #1ebe5b;
+    transform: translateY(-1px);
+    color: #fff;
+}
+
+/* Frete */
+.frete-box {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    margin-bottom: 24px;
+}
+.frete-box__label { font-size: 14px; font-weight: 600; display: block; margin-bottom: 12px; }
+.frete-box__row { display: flex; gap: 10px; }
+.frete-box__row input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    font-size: 14px;
+    outline: none;
+}
+.frete-box__row input:focus { border-color: var(--color-accent); }
+.frete-result { margin-top: 12px; font-size: 13px; }
+
+/* Selos */
+.product-trust {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.product-trust__item {
+    font-size: 13px;
+    color: var(--color-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ── Abas ──────────────────────────────────── */
+.tabs {
+    display: flex;
+    gap: 8px;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+}
+.tab {
+    padding: 12px 20px;
+    background: none;
+    border: none;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all var(--transition);
+}
+.tab:hover { color: var(--color-text); }
+.tab.active {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+    font-weight: 600;
+}
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.tab-panel h3 {
+    font-family: var(--font-display);
+    font-size: 20px;
+    margin-bottom: 16px;
+}
+.tab-panel p {
+    color: var(--color-muted);
+    line-height: 1.8;
+    margin-bottom: 14px;
+    font-size: 15px;
+}
+.tab-panel ul { padding-left: 20px; color: var(--color-muted); line-height: 1.9; }
+
+/* Tabela de especificações */
+.specs-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+.specs-table th {
+    width: 35%;
+    text-align: left;
+    padding: 14px 18px;
+    background: var(--color-surface);
+    font-weight: 600;
+    font-size: 14px;
+}
+.specs-table td {
+    padding: 14px 18px;
+    font-size: 14px;
+    color: var(--color-muted);
+}
+.specs-table tr { border-bottom: 1px solid var(--color-border); }
+.specs-table tr:last-child { border-bottom: none; }
+
+/* Avaliações */
+.review {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--color-border);
+}
+.review:last-child { border-bottom: none; }
+.review__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+.review__header strong { font-size: 15px; }
+.review__date { font-size: 12px; color: var(--color-muted); margin-left: auto; }
+.review p { color: var(--color-text); font-size: 14px; margin: 0; }
+
+/* ── Responsivo ────────────────────────────── */
+@media (max-width: 900px) {
+    .product-layout { grid-template-columns: 1fr; gap: 32px; }
+}
+@media (max-width: 600px) {
+    .price-current { font-size: 28px; }
+    .product-buy-btn,
+    .btn--whatsapp { width: 100%; }
+    .frete-box__row { flex-direction: column; }
+    .tab { flex: 1; text-align: center; padding: 10px; font-size: 13px; }
+}
+
+/* ── Dark mode ─────────────────────────────── */
+body.dark-mode .product-info__price,
+body.dark-mode .product-gallery__main,
+body.dark-mode .thumb { background: #1e1e1e; }
+body.dark-mode .specs-table th { background: #1e1e1e; }
+body.dark-mode .review p { color: #e0e0e0; }
+

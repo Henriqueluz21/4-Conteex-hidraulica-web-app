@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produto — Hidráulica São Gabriel</title>
+    <meta name="description" content="Confira os detalhes do produto na Hidráulica São Gabriel.">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/produto.css">
+</head>
+<body>
+
+    <!-- Banner -->
+    <div class="promo-banner">
+        Frete grátis para compras acima de R$699
+        <a href="#">Saiba mais</a>
+    </div>
+
+    <header class="header">
+    <div class="container header__inner">
+        <a href="index.html" class="header__logo">
+            <span class="header__logo-text">Hidráulica <strong>São Gabriel</strong></span>
+        </a>
+
+        <nav>
+            <ul class="header__nav">
+                <li><a href="index.html">Início</a></li>
+                <li><a href="paginamain.html">Principal</a></li>
+                <li><a href="produtos.html">Produtos</a></li>
+                <li><a href="novidades.html">Novidades</a></li>
+                <li><a href="promocoes.html" class="active">Promoções</a></li>
+                <li><a href="contato.html">Contato</a></li>
+                <li><a href="sobree.html">Sobre</a></li>
+            </ul>
+        </nav>
+
+        <div class="header__actions">
+            <button class="btn--icon" aria-label="Buscar">🔍</button>
+            <button class="btn--icon" aria-label="Favoritos">❤️</button>
+            <button class="btn--icon" id="theme-toggle" aria-label="Alternar tema">🌙</button>
+            <button class="btn--icon" id="cart-toggle" aria-label="Abrir carrinho">
+                🛒
+                <span class="cart-count" id="cart-count">0</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Trilha de navegação">
+        <div class="container">
+            <a href="index.html">Início</a>
+            <span>›</span>
+            <a href="produtos.html">Produtos</a>
+            <span>›</span>
+            <strong id="breadcrumb-product">Produto</strong>
+        </div>
+    </nav>
+
+    <!-- Produto -->
+    <section class="product-section" aria-label="Detalhes do produto">
+        <div class="container product-layout">
+
+            <!-- Galeria -->
+            <div class="product-gallery">
+                <div class="product-gallery__main">
+                    <img id="product-image" src="" alt="Imagem do produto">
+                    <span class="badge badge--sale" id="product-badge">-15%</span>
+                </div>
+            </div>
+
+            <!-- Informações -->
+            <div class="product-info">
+                <div class="product-info__category" id="product-category"></div>
+                <h1 class="product-info__title" id="product-title"></h1>
+
+                <div class="product-info__rating">
+                    <span class="rating__stars" id="product-rating-stars"></span>
+                    <span id="product-rating-count"></span>
+                </div>
+
+                <div class="product-info__price">
+                    <div class="price-top">
+                        <span class="price-original" id="price-original"></span>
+                        <span class="price-discount" id="price-discount"></span>
+                    </div>
+                    <div class="price-current" id="price-current"></div>
+                    <div class="price-pix">
+                        <span class="price-pix__label">no Pix</span>
+                        <strong id="price-pix-value"></strong>
+                        <span class="price-pix__hint">(5% de desconto)</span>
+                    </div>
+                    <div class="price-installments" id="price-installments"></div>
+                </div>
+
+                <p class="product-info__desc" id="product-desc"></p>
+
+                <div class="product-info__buy">
+                    <div class="qty-stepper">
+                        <button id="qty-minus">−</button>
+                        <input id="qty-input" type="text" value="1" readonly>
+                        <button id="qty-plus">+</button>
+                    </div>
+                    <button class="btn btn--primary btn--lg product-buy-btn" id="product-buy">
+                        🛒 Comprar agora
+                    </button>
+                    <a class="btn btn--whatsapp btn--lg" id="product-whatsapp" target="_blank" href="#">
+                        💬 WhatsApp
+                    </a>
+                </div>
+
+                <div class="frete-box">
+                    <span class="frete-box__label">📦 Calcular frete e prazo</span>
+                    <div class="frete-box__row">
+                        <input id="cep-input" type="text" placeholder="Digite seu CEP" maxlength="9">
+                        <button id="cep-btn" class="btn btn--ghost">Calcular</button>
+                    </div>
+                    <div id="frete-result" class="frete-result"></div>
+                </div>
+
+                <div class="product-trust">
+                    <div class="product-trust__item">🚚 Envio em até 24h</div>
+                    <div class="product-trust__item">🛡️ Garantia de fábrica</div>
+                    <div class="product-trust__item">↩️ Troca em até 7 dias</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Abas -->
+    <section class="product-tabs-section section">
+        <div class="container">
+            <div class="tabs" role="tablist">
+                <button class="tab active" data-tab="descricao">Descrição</button>
+                <button class="tab" data-tab="especificacoes">Especificações técnicas</button>
+                <button class="tab" data-tab="avaliacoes">Avaliações</button>
+            </div>
+
+            <div class="tab-panel active" id="panel-descricao">
+                <h3>Descrição do produto</h3>
+                <p id="product-desc-full"></p>
+            </div>
+
+            <div class="tab-panel" id="panel-especificacoes">
+                <h3>Ficha técnica</h3>
+                <table class="specs-table">
+                    <tbody id="specs-body">
+                        <!-- preenchido pelo JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-panel" id="panel-avaliacoes">
+                <h3>O que os clientes dizem</h3>
+                <div id="reviews-container">
+                    <!-- preenchido pelo JS -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Relacionados -->
+    <section class="section section--surface">
+        <div class="container">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-header__title">Produtos relacionados</h2>
+                    <p class="section-header__sub">Quem viu este também se interessou</p>
+                </div>
+            </div>
+            <div class="products-grid" id="related-products">
+                <!-- preenchido pelo JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Carrinho -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <aside class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-sidebar__header">
+            <h3>Seu carrinho</h3>
+            <button class="cart-close" id="cart-close">✕</button>
+        </div>
+        <div class="cart-sidebar__items" id="cart-items"></div>
+        <div class="cart-sidebar__footer">
+            <div class="cart-total">
+                <span>Total</span>
+                <span id="cart-total">R$ 0,00</span>
+            </div>
+            <button class="btn btn--primary" style="width:100%;">Finalizar Compra</button>
+        </div>
+    </aside>
+
+    <!-- IMPORTANTE: ordem dos scripts -->
+    <script src="../js/produtos-data.js" defer></script>  <!-- 1º: dados -->
+    <script src="../js/js.js" defer></script>             <!-- 2º: carrinho -->
+    <script src="../js/produto.js" defer></script>        <!-- 3º: preenche a página -->
+</body>
+</html>

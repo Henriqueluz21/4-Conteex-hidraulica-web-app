@@ -1,0 +1,39 @@
+/* ============================================================
+   HSG — Estados iniciais para as animações de anime-animations.js
+   Sem isso, o conteúdo aparece "pronto" por uma fração de segundo
+   antes da animação de entrada rodar.
+   ============================================================ */
+
+.hero__eyebrow,
+.hero__title,
+.hero__subtitle,
+.hero__actions {
+    opacity: 0;
+}
+
+.product-card,
+.category-card,
+.trust-bar__item,
+.section-header,
+.about-strip,
+.hsg-video-wrapper,
+.hsg-video-header {
+    opacity: 0;
+}
+
+/* Quem prefere menos movimento já vê tudo visível, sem depender do JS */
+@media (prefers-reduced-motion: reduce) {
+    .hero__eyebrow,
+    .hero__title,
+    .hero__subtitle,
+    .hero__actions,
+    .product-card,
+    .category-card,
+    .trust-bar__item,
+    .section-header,
+    .about-strip,
+    .hsg-video-wrapper,
+    .hsg-video-header {
+        opacity: 1;
+    }
+}

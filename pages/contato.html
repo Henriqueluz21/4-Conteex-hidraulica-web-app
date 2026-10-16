@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato — Hidráulica São Gabriel</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ═══════════════════════════════════════
+           CONTATO — estilos dedicados da página
+           ═══════════════════════════════════════ */
+        :root {
+            --navy:    #0a1420;
+            --navy-2:  #0d2a44;
+            --blue:    #3B5BDB;
+            --blue-lt: #7a9bff;
+            --surface: #ffffff;
+            --surface-2:#f5f7fb;
+            --ink:     #111827;
+            --muted:   #5b6472;
+            --line:    #e6e9f0;
+            --radius:  18px;
+            --radius-lg: 24px;
+        }
+
+        body.contato-page {
+            background: var(--surface-2);
+            font-family: 'Manrope', sans-serif;
+            color: var(--ink);
+            -webkit-font-smoothing: antialiased;
+        }
+        body.contato-page a { text-decoration: none; color: inherit; }
+
+        .contato-wrap { max-width: 1160px; margin-inline: auto; padding-inline: 24px; }
+
+        /* ── Hero ── */
+        .contato-hero {
+            position: relative;
+            overflow: hidden;
+            background:
+                radial-gradient(1200px 500px at 80% -20%, rgba(59,91,219,.25), transparent 60%),
+                linear-gradient(160deg, var(--navy) 0%, var(--navy-2) 100%);
+            color: #fff;
+            padding: 96px 0 120px;
+            text-align: center;
+        }
+        .contato-hero::after {
+            content: "";
+            position: absolute;
+            inset: auto 0 0 0;
+            height: 70px;
+            background: var(--surface-2);
+            border-radius: 50% 50% 0 0 / 30px 30px 0 0;
+            transform: translateY(35px);
+        }
+        .contato-hero__badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--blue-lt);
+            background: rgba(122,155,255,.12);
+            border: 1px solid rgba(122,155,255,.3);
+            padding: 8px 18px;
+            border-radius: 999px;
+            margin-bottom: 22px;
+        }
+        .contato-hero h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(2.3rem, 5vw, 3.6rem);
+            font-weight: 800;
+            letter-spacing: -.02em;
+            line-height: 1.1;
+            max-width: 700px;
+            margin-inline: auto;
+        }
+        .contato-hero p {
+            max-width: 560px;
+            margin: 20px auto 0;
+            color: rgba(255,255,255,.75);
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        /* ── Cards de contato ── */
+        .contato-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: -60px;
+            position: relative;
+            z-index: 3;
+        }
+        .contato-card {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 26px 22px;
+            box-shadow: 0 18px 40px rgba(10,20,32,.08);
+            transition: transform .3s ease, box-shadow .3s ease;
+        }
+        .contato-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 26px 55px rgba(10,20,32,.14);
+        }
+        .contato-card__icon {
+            width: 52px; height: 52px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--blue), var(--blue-lt));
+            color: #fff;
+            margin-bottom: 16px;
+        }
+        .contato-card__icon svg { width: 24px; height: 24px; }
+        .contato-card h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .contato-card p {
+            font-size: 13.5px;
+            color: var(--muted);
+            line-height: 1.55;
+            word-break: break-word;
+        }
+        .contato-card a:hover { color: var(--blue); }
+
+        /* ── Seção principal (info + form) ── */
+        .contato-main {
+            display: grid;
+            grid-template-columns: 1fr 1.15fr;
+            gap: 40px;
+            margin: 70px 0 80px;
+            align-items: start;
+        }
+
+        /* Info lateral */
+        .contato-info h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.9rem;
+            font-weight: 800;
+            letter-spacing: -.02em;
+            margin-bottom: 14px;
+        }
+        .contato-info > p {
+            color: var(--muted);
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+        .contato-info__list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+        .contato-info__list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 14.5px;
+            color: #2a3441;
+        }
+        .contato-info__list .check {
+            flex: none;
+            width: 22px; height: 22px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+            background: rgba(59,91,219,.12);
+            color: var(--blue);
+            font-size: 12px;
+            margin-top: 1px;
+        }
+
+        /* Stats */
+        .contato-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 30px;
+        }
+        .contato-stat {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(10,20,32,.05);
+        }
+        .contato-stat strong {
+            display: block;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--blue);
+            letter-spacing: -.01em;
+        }
+        .contato-stat span {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        /* Form card */
+        .contato-form-card {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            box-shadow: 0 24px 60px rgba(10,20,32,.1);
+        }
+        .contato-form-card h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -.02em;
+            margin-bottom: 6px;
+        }
+        .contato-form-card .sub {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 28px;
+        }
+
+        .field { margin-bottom: 18px; }
+        .field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 7px;
+            color: #2a3441;
+        }
+        .field input,
+        .field textarea {
+            width: 100%;
+            font-family: inherit;
+            font-size: 14.5px;
+            padding: 13px 16px;
+            border: 1.5px solid var(--line);
+            border-radius: 12px;
+            background: var(--surface-2);
+            color: var(--ink);
+            transition: border-color .2s, box-shadow .2s, background .2s;
+            resize: vertical;
+        }
+        .field textarea { min-height: 130px; }
+        .field input:focus,
+        .field textarea:focus {
+            outline: none;
+            border-color: var(--blue);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(59,91,219,.12);
+        }
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .btn-contato {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 15px 28px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--blue), #2447c4);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform .2s, box-shadow .2s;
+        }
+        .btn-contato:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(59,91,219,.35);
+        }
+        .btn-whats {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            margin-top: 14px;
+            padding: 15px 28px;
+            border: 1.5px solid #25d366;
+            border-radius: 12px;
+            background: #25d366;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            transition: transform .2s, box-shadow .2s;
+        }
+        .btn-whats:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(37,211,102,.35);
+        }
+
+        /* Pop-up */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(10,20,32,.55);
+            backdrop-filter: blur(3px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .popup-overlay.aberto { display: flex; }
+        .popup-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 44px 36px;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 30px 70px rgba(0,0,0,.25);
+            animation: popup-in .35s ease;
+        }
+        @keyframes popup-in {
+            from { opacity: 0; transform: translateY(20px) scale(.96); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .popup-card .icon {
+            width: 72px; height: 72px;
+            margin: 0 auto 18px;
+            border-radius: 50%;
+            background: rgba(37,211,102,.15);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 34px;
+        }
+        .popup-card h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .popup-card p { color: var(--muted); font-size: 14px; margin-bottom: 26px; line-height: 1.6; }
+
+        /* Responsivo */
+        @media (max-width: 900px) {
+            .contato-cards { grid-template-columns: 1fr 1fr; }
+            .contato-main { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 560px) {
+            .contato-cards { grid-template-columns: 1fr; }
+            .contato-stats { grid-template-columns: 1fr; }
+            .field-row { grid-template-columns: 1fr; }
+            .contato-form-card { padding: 26px 20px; }
+            .contato-hero { padding: 80px 0 100px; }
+        }
+        /* ═══════════════════════════════════════
+   DARK MODE — tema escuro
+   ═══════════════════════════════════════ */
+body.dark-mode.sobre-page,
+body.dark-mode.contato-page {
+    --surface:   #151f2f;
+    --surface-2: #0b1220;
+    --ink:       #eef2f8;
+    --muted:     #a4b1c2;
+    --line:      #2b3b54;
+    background: var(--surface-2);
+    color: var(--ink);
+}
+
+/* Textos que estavam com cor clara fixa */
+body.dark-mode .sobre-porque__list li,
+body.dark-mode .contato-info__list li,
+body.dark-mode .field label {
+    color: #e8edf5;
+}
+
+/* Campos de formulário */
+body.dark-mode .field input,
+body.dark-mode .field textarea {
+    background: var(--surface);
+    color: var(--ink);
+    border-color: var(--line);
+}
+body.dark-mode .field input::placeholder,
+body.dark-mode .field textarea::placeholder {
+    color: #7b8aa0;
+}
+body.dark-mode .field input:focus,
+body.dark-mode .field textarea:focus {
+    background: #1b2637;
+    border-color: var(--blue-lt);
+    box-shadow: 0 0 0 4px rgba(122,155,255,.16);
+}
+
+/* Ajustes de contraste no escuro */
+body.dark-mode .sobre-cat strong,
+body.dark-mode .sobre-stat__num,
+body.dark-mode .contato-stat strong {
+    color: var(--blue-lt);
+}
+
+    </style>
+</head>
+<body class="contato-page">
+
+    <!-- Banner -->
+    <div class="promo-banner">
+        Frete grátis para compras acima de R$399
+        <a href="#">Saiba mais</a>
+    </div>
+
+    <header class="header">
+        <div class="container header__inner">
+            <a href="index.html" class="header__logo">
+                <span class="header__logo-text">Hidráulica <strong>São Gabriel</strong></span>
+            </a>
+
+            <nav>
+                <ul class="header__nav">
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="paginamain.html">Principal</a></li>
+                    <li><a href="produtos.html">Produtos</a></li>
+                    <li><a href="novidades.html">Novidades</a></li>
+                    <li><a href="promocoes.html">Promoções</a></li>
+                    <li><a href="contato.html" class="active">Contato</a></li>
+                    <li><a href="sobree.html">Sobre</a></li>
+                </ul>
+            </nav>
+
+            <div class="header__actions">
+                <button class="btn--icon" aria-label="Buscar">🔍</button>
+                <button class="btn--icon" aria-label="Favoritos">❤️</button>
+                <button class="btn--icon" id="theme-toggle" aria-label="Alternar tema">🌙</button>
+                <button class="btn--icon" id="cart-toggle" aria-label="Abrir carrinho">
+                    🛒
+                    <span class="cart-count" id="cart-count">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="contato-hero">
+        <div class="contato-wrap">
+            <span class="contato-hero__badge">💬 Fale conosco</span>
+            <h1>Vamos resolver o seu problema juntos</h1>
+            <p>Tem alguma dúvida, sugestão ou precisa de ajuda na escolha de bitolas e conexões? Nossa equipe está pronta para atender você.</p>
+        </div>
+    </section>
+
+    <!-- Cards de contato -->
+    <section>
+        <div class="contato-wrap">
+            <div class="contato-cards">
+
+                <div class="contato-card">
+                    <div class="contato-card__icon">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M22 16.92V19a2 2 0 0 1-2 2A19 19 0 0 1 3 4a2 2 0 0 1 2-2h2.09a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91A16 16 0 0 0 14 15l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                    </div>
+                    <h3>Telefone / WhatsApp</h3>
+                    <p><a href="https://wa.me/5511971835156" target="_blank">(11) 97183-5156</a></p>
+                </div>
+
+                <div class="contato-card">
+                    <div class="contato-card__icon">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                    </div>
+                    <h3>E-mail</h3>
+                    <p><a href="mailto:hidraulicasaogabriel@terra.com.br">hidraulicasaogabriel@terra.com.br</a></p>
+                </div>
+
+                <div class="contato-card">
+                    <div class="contato-card__icon">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </div>
+                    <h3>Nossa Loja</h3>
+                    <p>Rua Emílio Barbosa, 173 — São Paulo, SP</p>
+                </div>
+
+                <div class="contato-card">
+                    <div class="contato-card__icon">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>
+                        </svg>
+                    </div>
+                    <h3>Horário de atendimento</h3>
+                    <p>Seg a Sex: 8h às 18h<br></p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Conteúdo principal -->
+    <section>
+        <div class="contato-wrap contato-main">
+
+            <!-- Coluna de info -->
+            <div class="contato-info">
+                <h2>Por que falar com a gente?</h2>
+                <p>Somos especialistas em hidráulica há 15 anos e ajudamos você a escolher a peça certa — sem erro de bitola, sem dor de cabeça.</p>
+
+                <ul class="contato-info__list">
+                    <li><span class="check">✓</span> Atendimento personalizado para cada cliente</li>
+                    <li><span class="check">✓</span> Suporte técnico especializado em hidráulica</li>
+                    <li><span class="check">✓</span> Respostas em até 24 horas úteis</li>
+                    <li><span class="check">✓</span> Envios para todo o Brasil</li>
+                </ul>
+
+                <div class="contato-stats">
+                    <div class="contato-stat">
+                        <strong>+5.000</strong>
+                        <span>Clientes atendidos</span>
+                    </div>
+                    <div class="contato-stat">
+                        <strong>98%</strong>
+                        <span>Satisfação no atendimento</span>
+                    </div>
+                    <div class="contato-stat">
+                        <strong>&lt; 24h</strong>
+                        <span>Tempo médio de resposta</span>
+                    </div>
+                    <div class="contato-stat">
+                        <strong>15 anos</strong>
+                        <span>De experiência no mercado</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulário -->
+            <div class="contato-form-card">
+                <h2>Envie uma mensagem</h2>
+                <p class="sub">Preencha os campos abaixo e responderemos o mais rápido possível.</p>
+
+                <form id="contact-form">
+                    <div class="field-row">
+                        <div class="field">
+                            <label for="field-nome">Nome</label>
+                            <input type="text" id="field-nome" placeholder="Seu nome completo">
+                        </div>
+                        <div class="field">
+                            <label for="field-email">E-mail</label>
+                            <input type="email" id="field-email" placeholder="seu@email.com">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="field-assunto">Assunto</label>
+                        <input type="text" id="field-assunto" placeholder="Como podemos ajudar?">
+                    </div>
+
+                    <div class="field">
+                        <label for="field-mensagem">Mensagem</label>
+                        <textarea id="field-mensagem" placeholder="Descreva sua dúvida ou mensagem..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-contato">
+                        Enviar Mensagem
+                    </button>
+
+                    <a href="https://wa.me/5511971835156" target="_blank" class="btn-whats">
+                        💬 Falar direto no WhatsApp
+                    </a>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Pop-up de confirmação -->
+    <div class="popup-overlay" id="popup-overlay">
+        <div class="popup-card">
+            <div class="icon">✅</div>
+            <h3>Mensagem enviada!</h3>
+            <p>Obrigado por entrar em contato.<br>Responderemos em até 24 horas úteis.</p>
+            <button id="popup-fechar" class="btn-contato" style="width:100%;">Fechar</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__grid">
+                <div>
+                    <div class="footer__logo">Hidráulica São Gabriel</div>
+                    <p class="footer__desc">
+                        Produtos selecionados para oferecer qualidade,
+                        elegância e praticidade para seu dia a dia.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="footer__heading">Loja</h4>
+                    <ul class="footer__links">
+                        <li><a href="produtos.html">Produtos</a></li>
+                        <li><a href="promocoes.html">Promoções</a></li>
+                        <li><a href="novidades.html">Novidades</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer__heading">Empresa</h4>
+                    <ul class="footer__links">
+                        <li><a href="sobree.html">Sobre</a></li>
+                        <li><a href="contato.html">Contato</a></li>
+                        <li><a href="#">Trabalhe Conosco</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer__heading">Suporte</h4>
+                    <ul class="footer__links">
+                        <li><a href="#">Ajuda</a></li>
+                        <li><a href="#">Trocas</a></li>
+                        <li><a href="#">Privacidade</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer__bottom">
+                <span>© 2026 Hidráulica São Gabriel. Todos os direitos reservados.</span>
+                <span>Desenvolvido com HTML + CSS</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Carrinho lateral -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <aside class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-sidebar__header">
+            <h3>Seu carrinho</h3>
+            <button class="cart-close" id="cart-close">✕</button>
+        </div>
+        <div class="cart-sidebar__items" id="cart-items"></div>
+        <div class="cart-sidebar__footer">
+            <div class="cart-total">
+                <span>Total</span>
+                <span id="cart-total">R$ 0,00</span>
+            </div>
+            <button class="btn btn--primary" style="width:100%;">Finalizar Compra</button>
+        </div>
+    </aside>
+
+    <script src="../js/js.js"></script>
+    <script>
+        // ── Pop-up do formulário ──────────────────────
+        const form        = document.getElementById("contact-form");
+        const popup       = document.getElementById("popup-overlay");
+        const popupFechar = document.getElementById("popup-fechar");
+
+        form.addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const nome     = document.getElementById("field-nome").value.trim();
+            const email    = document.getElementById("field-email").value.trim();
+            const mensagem = document.getElementById("field-mensagem").value.trim();
+
+            if (!nome || !email || !mensagem) {
+                alert("Por favor, preencha pelo menos nome, e-mail e mensagem.");
+                return;
+            }
+
+            popup.classList.add("aberto");
+            form.reset();
+        });
+
+        popupFechar.addEventListener("click", function() {
+            popup.classList.remove("aberto");
+        });
+
+        popup.addEventListener("click", function(e) {
+            if (e.target === popup) {
+                popup.classList.remove("aberto");
+            }
+        });
+
+        // ── Dark mode ─────────────────────────────────
+        const themeBtn = document.getElementById("theme-toggle");
+
+        themeBtn.addEventListener("click", () => {
+            document.body.classList.toggle("dark-mode");
+            if (document.body.classList.contains("dark-mode")) {
+                themeBtn.textContent = "☀️";
+                localStorage.setItem("theme", "dark");
+            } else {
+                themeBtn.textContent = "🌙";
+                localStorage.setItem("theme", "light");
+            }
+        });
+
+        if (localStorage.getItem("theme") === "dark") {
+            document.body.classList.add("dark-mode");
+            themeBtn.textContent = "☀️";
+        }
+    </script>
+
+</body>
+</html>
