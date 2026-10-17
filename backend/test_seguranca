@@ -1,0 +1,7 @@
+from seguranca import gerar_hash_senha
+
+senha = "MinhaSenha123"
+hash_senha = gerar_hash_senha(senha)
+
+print("Senha original:", senha)
+print("Hash gerado:", hash_senha)
