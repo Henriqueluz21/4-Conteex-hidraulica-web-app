@@ -3,9 +3,13 @@ from sqlalchemy import text
 from pydantic import BaseModel
 from database import engine
 from schemas import ClienteEntrada
+from schemas import LoginEntrada
 from database import SessionLocal
 from models import Cliente
 from seguranca import gerar_hash_senha
+from fastapi import HTTPException
+from sqlalchemy.exc import IntegrityError
+from seguranca import verificar_senha
 
 app = FastAPI(title="Conteex Hidráulica API")
 
@@ -45,6 +49,11 @@ def criar_cliente(cliente: ClienteEntrada):
             "email": novo_cliente.email
         }
 
+    except IntegrityError as erro:
+        print("ERRO NO CADASTRO:", repr(erro))
+        db.rollback()
+        raise HTTPException(status_code=409, detail="Email já cadastrado")
+
     except Exception as erro:
         print("ERRO NO CADASTRO:", repr(erro))
         db.rollback()
@@ -55,9 +64,38 @@ def criar_cliente(cliente: ClienteEntrada):
         print("SESSÃO ENCERRADA")
 
 
-@app.get("/")
-def inicio():
-    return {"mensagem": "API da Conteex funcionando!"}
+
+@app.post("/clientes/login")
+def login_cliente(login: LoginEntrada):
+    db = SessionLocal()
+
+    try:
+        cliente = db.query(Cliente).filter(Cliente.email == login.email).first()
+          
+        if cliente is not None:
+            verificar = verificar_senha(login.senha, cliente.senha_hash)
+            if verificar:
+                return {
+                    "id": cliente.id,
+                    "nome": cliente.nome,
+                    "email": cliente.email,
+                    "telefone": cliente.telefone
+                }
+            else:
+                        raise HTTPException(status_code=401, detail="Email ou senha incorretos")
+        
+        else:
+            raise HTTPException(status_code=401, detail="Email ou Senha incorretos")
+        
+    except HTTPException:
+        raise
+        
+    except Exception as erro:
+        print("ERRO AO CONSULTAR CLIENTE:", repr(erro))
+        raise HTTPException(status_code=500, detail="Erro ao consultar cliente")
+    
+    finally:
+        db.close()
 
 
 @app.get("/testar-banco")
