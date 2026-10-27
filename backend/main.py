@@ -13,10 +13,19 @@ from seguranca import verificar_senha
 from auth import create_access_token, verify_access_token
 from fastapi import Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Conteex Hidráulica API")
 
 bearer_scheme = HTTPBearer()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://127.0.0.1:5500", "http://localhost:5500"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.post("/clientes", status_code=201)
