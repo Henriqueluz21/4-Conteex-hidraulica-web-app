@@ -24,3 +24,9 @@ def create_access_token(data: dict):
     return jwt.encode(data_copy, SECRET_KEY, algorithm=ALGORITHM)
 
 
+def verify_access_token(token: str):
+    try:
+        verificar = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return verificar
+    except jwt.InvalidTokenError:
+        return None      

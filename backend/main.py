@@ -10,37 +10,34 @@ from seguranca import gerar_hash_senha
 from fastapi import HTTPException
 from sqlalchemy.exc import IntegrityError
 from seguranca import verificar_senha
+from auth import create_access_token, verify_access_token
+from fastapi import Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 app = FastAPI(title="Conteex Hidráulica API")
 
+bearer_scheme = HTTPBearer()
 
 
 @app.post("/clientes", status_code=201)
 def criar_cliente(cliente: ClienteEntrada):
-    print("ETAPA 1: iniciando cadastro")
 
     db = SessionLocal()
 
     try:
         hash_senha = gerar_hash_senha(cliente.senha)
-        print("ETAPA 2: hash gerado")
-
         novo_cliente = Cliente(
             nome=cliente.nome,
             email=cliente.email,
             telefone=cliente.telefone,
             senha_hash=hash_senha
         )
-        print("ETAPA 3: objeto criado")
 
         db.add(novo_cliente)
-        print("ETAPA 4: objeto adicionado à sessão")
 
         db.commit()
-        print("ETAPA 5: commit concluído")
 
         db.refresh(novo_cliente)
-        print("ETAPA 6: objeto atualizado")
 
         return {
             "mensagem": "Cliente cadastrado com sucesso!",
@@ -61,7 +58,6 @@ def criar_cliente(cliente: ClienteEntrada):
 
     finally:
         db.close()
-        print("SESSÃO ENCERRADA")
 
 
 
@@ -73,13 +69,12 @@ def login_cliente(login: LoginEntrada):
         cliente = db.query(Cliente).filter(Cliente.email == login.email).first()
           
         if cliente is not None:
-            verificar = verificar_senha(login.senha, cliente.senha_hash)
+            verificar = verificar_senha(login.senha, cliente.senha_hash)           
             if verificar:
+                token = create_access_token({"sub": str(cliente.id)})
                 return {
-                    "id": cliente.id,
-                    "nome": cliente.nome,
-                    "email": cliente.email,
-                    "telefone": cliente.telefone
+                    "access_token": token,
+                    "token_type": "bearer"
                 }
             else:
                         raise HTTPException(status_code=401, detail="Email ou senha incorretos")
@@ -97,6 +92,51 @@ def login_cliente(login: LoginEntrada):
     finally:
         db.close()
 
+def obter_credenciais(credenciais: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
+    token = credenciais.credentials
+    verificar = verify_access_token(token)
+    if verificar is None:
+        raise HTTPException(status_code=401, detail="Token inválido ou expirado")
+    return verificar
+
+
+def obter_id_cliente(credenciais: dict = Depends(obter_credenciais)):
+    if "sub" not in credenciais:
+        raise HTTPException(status_code=401, detail="Token inválido ou expirado")
+    if not credenciais["sub"].isdigit():
+        raise HTTPException(status_code=401, detail="Token inválido ou expirado")
+    return credenciais.get("sub")
+
+
+@app.get("/clientes/me")
+def obter_dados_cliente(id_cliente: str = Depends(obter_id_cliente)):
+    db = SessionLocal()
+    
+    try:       
+        id_cliente = int(id_cliente)
+        cliente = db.query(Cliente).filter(Cliente.id == id_cliente).first()
+        if cliente is None:
+            raise HTTPException(status_code=404, detail="Cliente não encontrado")
+        
+        return {
+            "id": cliente.id,
+            "nome": cliente.nome,
+            "email": cliente.email,
+            "telefone": cliente.telefone,
+            "cpf": cliente.cpf,
+            "cep": cliente.cep,
+            "criado_em": cliente.criado_em
+        }
+    
+    except HTTPException:
+        raise
+    
+    except Exception as erro:
+        print("ERRO AO CONSULTAR CLIENTE:", repr(erro))
+        raise HTTPException(status_code=500, detail="Erro ao consultar cliente")
+    
+    finally:
+        db.close()
 
 @app.get("/testar-banco")
 def testar_banco():
