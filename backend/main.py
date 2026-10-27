@@ -39,7 +39,9 @@ def criar_cliente(cliente: ClienteEntrada):
             nome=cliente.nome,
             email=cliente.email,
             telefone=cliente.telefone,
-            senha_hash=hash_senha
+            senha_hash=hash_senha,
+            cep=cliente.cep,
+            cpf=cliente.cpf
         )
 
         db.add(novo_cliente)

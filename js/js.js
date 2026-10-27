@@ -27,6 +27,7 @@ const cartClose   = document.getElementById('cart-close');
 const cartItemsEl = document.getElementById('cart-items');
 const cartCountEl = document.getElementById('cart-count');
 const cartTotalEl = document.getElementById('cart-total');
+const TOKEN_KEY = 'conteex_access_token';
 
 
 // ============================================================
@@ -535,8 +536,148 @@ function setupCart() {
         });
     }
 
+    function getStoredToken() {
+        try {
+            return localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
+        } catch (error) {
+            console.error('Não foi possível recuperar a sessão:', error);
+            return null;
+        }
+    }
+
+    function clearStoredToken() {
+        try {
+            localStorage.removeItem(TOKEN_KEY);
+            sessionStorage.removeItem(TOKEN_KEY);
+        } catch (error) {
+            console.error('Não foi possível encerrar a sessão:', error);
+        }
+    }
+
+    function setupProfile() {
+        const headerActions = document.querySelector('.header__actions');
+        if (!headerActions) return;
+
+        let profileToggle = document.getElementById('profile-toggle');
+        if (!profileToggle) {
+            profileToggle = document.createElement('button');
+            profileToggle.className = 'btn--icon profile-toggle';
+            profileToggle.id = 'profile-toggle';
+            profileToggle.type = 'button';
+            profileToggle.setAttribute('aria-label', 'Abrir perfil');
+            profileToggle.textContent = '👤';
+            headerActions.insertBefore(profileToggle, headerActions.firstChild);
+        }
+
+        const profileOverlay = document.createElement('div');
+        profileOverlay.className = 'profile-overlay';
+        profileOverlay.id = 'profile-overlay';
+
+        const profileSidebar = document.createElement('aside');
+        profileSidebar.className = 'profile-sidebar';
+        profileSidebar.id = 'profile-sidebar';
+        profileSidebar.setAttribute('aria-label', 'Perfil do cliente');
+        profileSidebar.innerHTML = `
+            <div class="profile-sidebar__header">
+                <h2>Meu perfil</h2>
+                <button class="profile-close" type="button" aria-label="Fechar perfil">✕</button>
+            </div>
+            <div class="profile-sidebar__content">
+                <div class="profile-avatar">👤</div>
+                <div class="profile-loading">Carregando seus dados...</div>
+            </div>
+            <div class="profile-sidebar__footer">
+                <button class="btn btn--primary profile-logout" type="button">Sair da conta</button>
+            </div>
+        `;
+
+        document.body.append(profileOverlay, profileSidebar);
+
+        const closeProfile = () => {
+            profileSidebar.classList.remove('active');
+            profileOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        };
+
+        const openProfile = async () => {
+            profileSidebar.classList.add('active');
+            profileOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            const content = profileSidebar.querySelector('.profile-sidebar__content');
+            const token = getStoredToken();
+            if (!token) {
+                content.innerHTML = '<div class="profile-message">Entre na sua conta para visualizar seu perfil.</div>';
+                return;
+            }
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/clientes/me', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                if (response.status === 401) {
+                    clearStoredToken();
+                    content.innerHTML = '<div class="profile-message profile-message--error">Sua sessão expirou. Entre novamente para continuar.</div>';
+                    return;
+                }
+                if (!response.ok) throw new Error('Não foi possível carregar os dados do perfil.');
+
+                const customer = await response.json();
+                const createdAt = customer.criado_em
+                    ? new Date(customer.criado_em).toLocaleDateString('pt-BR')
+                    : 'Não informado';
+                content.innerHTML = `
+                    <div class="profile-avatar">${escapeHTML((customer.nome || '?').charAt(0).toUpperCase())}</div>
+                    <h3 class="profile-name">${escapeHTML(customer.nome || 'Cliente')}</h3>
+                    <div class="profile-data">
+                        <div><span>E-mail</span><strong>${escapeHTML(customer.email || 'Não informado')}</strong></div>
+                        <div><span>Telefone</span><strong>${escapeHTML(customer.telefone || 'Não informado')}</strong></div>
+                        <div><span>CPF</span><strong>${escapeHTML(customer.cpf || 'Não informado')}</strong></div>
+                        <div><span>CEP</span><strong>${escapeHTML(customer.cep || 'Não informado')}</strong></div>
+                        <div><span>Cliente desde</span><strong>${createdAt}</strong></div>
+                    </div>
+                `;
+            } catch (error) {
+                content.innerHTML = `<div class="profile-message profile-message--error">${escapeHTML(error instanceof TypeError ? 'Não foi possível conectar à API.' : error.message)}</div>`;
+            }
+        };
+
+        profileToggle.addEventListener('click', openProfile);
+        profileOverlay.addEventListener('click', closeProfile);
+        profileSidebar.querySelector('.profile-close').addEventListener('click', closeProfile);
+        profileSidebar.querySelector('.profile-logout').addEventListener('click', () => {
+            clearStoredToken();
+            closeProfile();
+            window.location.href = 'login.html';
+        });
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape') closeProfile();
+        });
+    }
+
+    setupProfile();
+
     document.addEventListener('keydown', event => {
         if (event.key === 'Escape') closeCart();
+    });
+
+    document.addEventListener('click', event => {
+        const button = event.target.closest('.cart-sidebar__footer .btn--primary');
+        if (!button) return;
+
+        event.preventDefault();
+        let token = null;
+        try {
+            token = localStorage.getItem('conteex_access_token')
+                || sessionStorage.getItem('conteex_access_token');
+        } catch (error) {
+            console.error('Não foi possível recuperar a sessão:', error);
+        }
+
+        window.location.href = token
+            ? 'finalizar-compra.html'
+            : `login.html?redirect=${encodeURIComponent('finalizar-compra.html')}`;
     });
 }
 
@@ -587,6 +728,45 @@ function injectAnimations() {
         .product-card__wishlist {
             transition: transform .2s ease, color .2s ease, background .2s ease;
         }
+
+        .profile-overlay {
+            position: fixed; inset: 0; z-index: 1090;
+            background: rgba(15, 23, 42, .42); opacity: 0;
+            pointer-events: none; transition: opacity .2s ease;
+        }
+        .profile-overlay.active { opacity: 1; pointer-events: auto; }
+        .profile-sidebar {
+            position: fixed; top: 0; right: 0; bottom: 0; z-index: 1100;
+            width: min(390px, 92vw); display: flex; flex-direction: column;
+            background: var(--color-bg); box-shadow: -8px 0 30px rgba(0,0,0,.16);
+            transform: translateX(100%); transition: transform .25s ease;
+        }
+        .profile-sidebar.active { transform: translateX(0); }
+        .profile-sidebar__header, .profile-sidebar__footer {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 20px 24px; border-bottom: 1px solid var(--color-border);
+        }
+        .profile-sidebar__header h2 { font-size: 20px; }
+        .profile-close {
+            border: 0; background: transparent; color: var(--color-muted);
+            cursor: pointer; font-size: 18px; padding: 4px 8px;
+        }
+        .profile-sidebar__content { flex: 1; overflow-y: auto; padding: 32px 24px; text-align: center; }
+        .profile-avatar {
+            display: grid; place-items: center; width: 72px; height: 72px;
+            margin: 0 auto 14px; border-radius: 50%; background: #e8edff;
+            color: var(--color-accent); font-size: 28px; font-weight: 800;
+        }
+        .profile-name { font-size: 20px; margin-bottom: 24px; }
+        .profile-data { display: grid; gap: 12px; text-align: left; }
+        .profile-data div { display: grid; gap: 4px; padding: 12px; border-radius: 10px; background: var(--color-surface); }
+        .profile-data span { color: var(--color-muted); font-size: 12px; }
+        .profile-data strong { overflow-wrap: anywhere; font-size: 14px; font-weight: 600; }
+        .profile-message { color: var(--color-muted); line-height: 1.5; }
+        .profile-message--error { color: var(--color-danger); }
+        .profile-sidebar__footer { border-top: 1px solid var(--color-border); border-bottom: 0; }
+        .profile-logout { width: 100%; background: var(--color-danger); }
+        .profile-logout:hover { background: #c92a2a; }
 
         .product-card__wishlist:hover {
             transform: scale(1.1);

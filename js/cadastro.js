@@ -63,7 +63,7 @@ phoneInput.addEventListener('input', () => {
     .replace(/(\d{5})(\d)/, '$1-$2');
 });
 
-form.addEventListener('submit', (event) => {
+form.addEventListener('submit', async (event) => {
   event.preventDefault();
   [nameField, emailField, phoneField, cpfField, cepField, passwordField, confirmField].forEach((field) => field.classList.remove('has-error'));
   alert.className = 'alert';
@@ -93,27 +93,50 @@ form.addEventListener('submit', (event) => {
     nome: nameInput.value.trim(),
     email: emailInput.value.trim(),
     telefone: phoneInput.value.trim(),
-    senha: passwordInput.value
+    senha: passwordInput.value,
+    cep: cepInput.value.trim(),
+    cpf: cpfInput.value.trim()
   };
 
-  console.log('Dados de cadastro:', dadosCadastro);
+  
+  try {
+    const resposta = await fetch('http://127.0.0.1:8000/clientes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(dadosCadastro)
+    });
 
-  const resposta = await fetch('http://127.0.0.1:8000/clientes', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(dadosCadastro)
-  });
+    const resultado = await resposta.json();
 
-  form.addEventListener('submit', async (event) => {
+    if (!resposta.ok) {
+      if (resposta.status === 409) {
+        throw new Error('Este e-mail já está cadastrado.');
+      }
 
-  setTimeout(() => {
+      if (resposta.status === 422) {
+        throw new Error('Confira os dados enviados e tente novamente.');
+      }
+
+      throw new Error(
+        resultado.detail || 'Não foi possível criar sua conta.'
+      );
+    }
+
+    alert.className = 'alert alert--success';
+    alert.textContent = 'Conta criada com sucesso! Você já pode entrar.';
+
+    form.reset();
+
+  } catch (erro) {
+    alert.className = 'alert alert--error';
+    alert.textContent = erro.message === 'Failed to fetch'
+      ? 'Não foi possível conectar ao servidor. Verifique se a API está ativa.'
+      : erro.message;
+
+  } finally {
     submitBtn.classList.remove('loading');
     submitBtn.disabled = false;
     btnLabel.textContent = 'Criar conta';
-    alert.className = 'alert alert--success';
-    alert.textContent = 'Conta criada com sucesso! Você já pode entrar.';
-    form.reset();
-  }, 1200);
-});
+  }});
