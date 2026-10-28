@@ -100,7 +100,7 @@ form.addEventListener('submit', async (event) => {
 
   
   try {
-    const resposta = await fetch('http://127.0.0.1:8000/clientes', {
+    const resposta = await fetch('https://conteex-api.onrender.com/clientes', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

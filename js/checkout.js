@@ -1,6 +1,6 @@
 const CART_KEY = 'hidraulica_sao_gabriel_cart';
 const TOKEN_KEY = 'conteex_access_token';
-const API_URL = 'http://127.0.0.1:8000';
+const API_URL = 'https://conteex-api.onrender.com';
 const checkoutItems = document.getElementById('checkoutItems');
 const checkoutSubtotal = document.getElementById('checkoutSubtotal');
 const checkoutTotal = document.getElementById('checkoutTotal');

@@ -612,7 +612,7 @@ function setupCart() {
             }
 
             try {
-                const response = await fetch('http://127.0.0.1:8000/clientes/me', {
+                const response = await fetch('https://conteex-api.onrender.com/clientes/me', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
 

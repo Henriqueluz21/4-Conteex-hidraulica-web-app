@@ -83,7 +83,7 @@ form.addEventListener('submit', async event => {
   btnLabel.textContent = 'Entrando...';
 
   try {
-    const resposta = await fetch('http://127.0.0.1:8000/clientes/login', {
+    const resposta = await fetch('https://conteex-api.onrender.com/clientes/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, senha: passwordInput.value })
@@ -96,7 +96,7 @@ form.addEventListener('submit', async event => {
     localStorage.setItem('conteex_access_token', resultado.access_token);
     sessionStorage.setItem('conteex_access_token', resultado.access_token);
 
-    const respostaCliente = await fetch('http://127.0.0.1:8000/clientes/me', {
+    const respostaCliente = await fetch('https://conteex-api.onrender.com/clientes/me', {
       headers: { Authorization: `Bearer ${resultado.access_token}` }
     });
     if (!respostaCliente.ok) {
