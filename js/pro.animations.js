@@ -21,7 +21,7 @@
 
    Ordem de carregamento (fim do <body>):
    js.js → anime.js → smooth-scroll.js → anime-animations.js
-   → interactions.js → pro.animations.js
+   → interactions.js → pro-animations.js
    ============================================================ */
 
 (function () {

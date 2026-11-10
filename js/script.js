@@ -112,3 +112,113 @@ gsap.utils.toArray('.fire-card').forEach((card, i) => {
     scrollTrigger: { trigger: card, start: 'top 90%' }
   });
 });
+/* =====================================================================
+   Hidráulica São Gabriel — script.js
+   Lenis (scroll suave) + GSAP ScrollTrigger + Scroll Expansion Hero
+   ===================================================================== */
+
+(() => {
+  'use strict';
+
+  /* ═══════════════ 1. LENIS — SCROLL SUAVE ═══════════════ */
+  let lenis = null;
+
+  if (typeof Lenis !== 'undefined') {
+    lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 1.5,
+    });
+
+    // Sincroniza o Lenis com o ScrollTrigger do GSAP
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+      lenis.on('scroll', ScrollTrigger.update);
+
+      gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+      });
+
+      gsap.ticker.lagSmoothing(0);
+    }
+  }
+
+  /* ═══════════════ 2. SCROLL EXPANSION HERO ═══════════════ */
+  const hero    = document.querySelector('#expand-hero');
+  const media   = document.querySelector('#expand-hero .expand-media img');
+  const content = document.querySelector('#expand-hero .hero-content');
+  const hint    = document.querySelector('#expand-hero .scroll-hint');
+
+  if (hero && media) {
+    let frame = 0;
+
+    const update = () => {
+      cancelAnimationFrame(frame);
+
+      frame = requestAnimationFrame(() => {
+        const rect     = hero.getBoundingClientRect();
+        const total    = Math.max(1, rect.height - window.innerHeight);
+        const progress = Math.min(1, Math.max(0, -rect.top / total));
+        const isMobile = window.innerWidth <= 768;
+
+        // Card começa pequeno e expande até tela cheia
+        const startW = isMobile ? 84 : 56;
+        const startH = isMobile ? 62 : 68;
+        const w      = startW + (100 - startW) * progress;
+        const h      = startH + (100 - startH) * progress;
+        const radius = (isMobile ? 20 : 28) * (1 - progress);
+
+        media.style.width        = w + 'vw';
+        media.style.height       = h + 'vh';
+        media.style.borderRadius = radius + 'px';
+
+        // Título sobe e desaparece
+        if (content) {
+          const fade = Math.max(0, 1 - progress * 1.6);
+          content.style.opacity   = fade.toFixed(3);
+          content.style.transform = `translateY(${-120 * progress}px)`;
+        }
+
+        // "Role para explorar" some logo
+        if (hint) {
+          hint.style.opacity = Math.max(0, 1 - progress * 3).toFixed(3);
+        }
+      });
+    };
+
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  }
+
+  /* ═══════════════ 3. ANIMAÇÕES GSAP (opcional) ═══════════════ */
+  // Reveal suave das seções ao rolar
+  if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+    const sections = document.querySelectorAll('.bg-sec, .fire-sec, .cta-sec');
+
+    sections.forEach((section) => {
+      const inner = section.querySelector('.container, .fire-wrap');
+
+      if (!inner) return;
+
+      gsap.fromTo(
+        inner,
+        { opacity: 0, y: 60 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 75%',
+            end: 'top 40%',
+            scrub: false,
+          },
+        }
+      );
+    });
+  }
+
+})();
