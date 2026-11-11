@@ -29,7 +29,8 @@ const getToken = () => {
 };
 
 const redirectToLogin = () => {
-  window.location.href = `login.html?redirect=${encodeURIComponent('finalizar-compra.html')}`;
+  const base = window.location.pathname.includes('/pages/') ? '' : '/pages/';
+  window.location.href = `${base}login.html?redirect=${encodeURIComponent('finalizar-compra.html')}`;
 };
 
 const showCheckoutError = message => {
